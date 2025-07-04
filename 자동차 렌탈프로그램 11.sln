@@ -1,31 +1,159 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.4.33213.308
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "자동차 렌탈프로그램 11", "자동차 렌탈프로그램 11\자동차 렌탈프로그램 11.vcxproj", "{846A88BD-E5AD-4CB8-AE99-790C47E77F11}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{846A88BD-E5AD-4CB8-AE99-790C47E77F11}.Debug|x64.ActiveCfg = Debug|x64
-		{846A88BD-E5AD-4CB8-AE99-790C47E77F11}.Debug|x64.Build.0 = Debug|x64
-		{846A88BD-E5AD-4CB8-AE99-790C47E77F11}.Debug|x86.ActiveCfg = Debug|Win32
-		{846A88BD-E5AD-4CB8-AE99-790C47E77F11}.Debug|x86.Build.0 = Debug|Win32
-		{846A88BD-E5AD-4CB8-AE99-790C47E77F11}.Release|x64.ActiveCfg = Release|x64
-		{846A88BD-E5AD-4CB8-AE99-790C47E77F11}.Release|x64.Build.0 = Release|x64
-		{846A88BD-E5AD-4CB8-AE99-790C47E77F11}.Release|x86.ActiveCfg = Release|Win32
-		{846A88BD-E5AD-4CB8-AE99-790C47E77F11}.Release|x86.Build.0 = Release|Win32
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {805E4408-6163-4244-8CB4-73C22A9179A1}
-	EndGlobalSection
-EndGlobal
+#include <iostream>
+#include <conio.h>
+#include <stdlib.h>
+#include <fstream>
+using namespace std;
+
+struct Cars {
+    string company[200] = { "폭스바겐", "현대", "BMW", "Audi", "기아", "Tesla", "Mercedes", "Mahindra", "lamborghini", "porche", "Jeep" };
+    string model[200] = { "golf", "g90", "Q7", "R8", "Saltos", "S-Series", "Benz s-class", "Thar", "urus", "boxter", "grand cherokee" };
+    string color[200] = { "navy", "Black", "Red", "Brown", "Blue", "Silver", "Black", "Grey", "yellow", "Silver", "Green" };
+    string max_speed[200] = { "200 Km/h", "200 Km/h", "300 Km/h", "250 Km/h", "250 Km/h", "300 Km/h", "200 Km/h", "250 Km/h", "340 Km/h", "350 Km/h", "286 Km/h" };
+    int price[100] = { 200000, 150000, 250000, 300000, 120000, 400000, 500000, 180000, 850000, 850000, 200000 };
+    int date[100] = { 2020, 2022, 2019, 2018, 2018, 2019, 2018, 2021, 2010, 2022, 2019 };
+} car;
+
+
+
+struct Lease_info {
+    string Name[100];
+    string Natio_ID[100];
+    int payment_acc[100];
+    string rented_car[100];
+    string return_date[100];
+} lease;
+
+void Menu() {
+    int num = 1;
+    for (int i = 0; i < 11; ++i) {
+        cout << "\t\t\t";
+        cout << "Enter " << num << "\t- 선택하세요  " << car.company[i] << endl;
+        num++;
+    }
+}
+
+void Details(int Choice) {
+    system("CLS");
+    cout << "\n\n\n\t\t\t-----------------------------\n";
+    cout << "\t\t\tYou Have Selected - " << car.company[Choice - 1] << endl;
+    cout << "\t\t\t-----------------------------\n\n\n";
+    cout << "\t\t\tModel : " << car.model[Choice - 1] << endl;
+    cout << "\t\t\t색상 : " << car.color[Choice - 1] << endl;
+    cout << "\t\t\tMaximum Speed : " << car.max_speed[Choice - 1] << endl;
+    cout << "\t\t\t가격 : " << car.price[Choice - 1] << "won" << endl;
+}
+
+void checklease(int k) {
+    if (lease.payment_acc[k] >= car.price[k])
+        cout << "\n\n\n\t\t\t 차량 렌트가 성공적으로 완료되었습니다!! " << endl;
+    else
+        cout << "\n\n\n\t\t\t " << endl;
+}
+
+void user_input(int theChoice) {
+    system("CLS");
+    int i;
+    int j = theChoice - 1;
+    cout << "\t\t\t----------------------------------------\n";
+    cout << "\t\t\t 귀하의 개인 정보를 제공하십시오 : \n";
+    cout << "\t\t\t----------------------------------------\n\n";
+    cout << "\n\tNOTE:사용자의 정보를 입력하세요. 그 후에 예약이 진행됩니다.\n\n\n\n";
+    cout << "\t\t\t이름을 입력하시오 : ";
+    cin >> lease.Name[j];
+    cout << "\t\t\tId를 입력하시오 : ";
+    cin >> lease.Natio_ID[j];
+    cout << "\t\t\t전화번호를 입력하시오 : ";
+    cin >> lease.payment_acc[j];
+    lease.rented_car[j] = car.company[j];
+    cout << "\t\t\t반납일을 입력하시오 : ";
+    cin >> lease.return_date[j];
+    checklease(j);
+}
+
+int login() {
+    string pass = "";
+    char ch;
+    cout << "\n\n\n\n\n\n\n\t\t\t\t\t   Car Rental System Login";
+    cout << "\n\n\n\n\n\n\n\t\t\t\t\t 비밀번호를 입력하십시오: ";
+    ch = _getch();
+    while (ch != 13) { //character 13 is enter
+        pass.push_back(ch);
+        cout << '*';
+        ch = _getch();
+    }
+    if (pass == "pass") {
+        cout << "\n\n\n\n\t\t\t정보가 확인되었습니다.  'car retal system'에 오신 것을 환영합니다 \n\n";
+        getchar(); // 대기 후 종료
+        system("CLS");
+    }
+    else {
+        cout << "\n\n\n\n\t\t\t정보가 일치하지 않습니다. 다시 시도하십시오!!\n";
+        getchar(); // 대기 후 종료
+        system("CLS");
+        login();
+    }
+    return 0;
+}
+
+int main() {
+    // 로그인 함수 호출
+    login();
+
+    string decide = "yes";
+    cout << "\t\t\t----------------------------------------------\n";
+    cout << "\t\t\t\t CAR RENTAL SYSTEM \n";
+    cout << "\t\t\t저희 회사에 오신 것을 환영합니다. 메뉴에서 선택하십시오.: " << endl;
+    cout << "\t\t\t----------------------------------------------\n";
+
+    // 결과를 저장할 파일 생성
+    ofstream output("result.txt");
+
+    while (decide != "exit") {
+        Menu();
+        cout << "\n\n\n\t\t\tYour Choice: ";
+        int theChoice;
+        cin >> theChoice;
+        Details(theChoice);
+        cout << "\n\n\n\t\t\t 이 차량을 렌트하시길 원하시나요? (yes/no/exit): ";
+        cin >> decide;
+        if (decide == "yes") {
+            user_input(theChoice);
+            cout << "\n\n\t\t\t 또 다른 차를 빌리시겠습니까?  (yes/no) ";
+            cin >> decide;
+            if (decide == "no")
+                break;
+            system("CLS");
+        }
+        else {
+            if (decide == "no") {
+                system("CLS");
+                continue;
+            }
+            else if (decide == "exit") {
+                system("CLS");
+                break;
+            }
+        }
+    }
+
+    cout << "\n\n\t\t\t아래의 정보로 차량 렌트가 완료되었습니다. \n";
+    cout << "\t\t\t-----------------------------\n";
+    for (int i = 0; i < 100; ++i) {
+        if (lease.rented_car[i] != "") {
+            cout << "\t\t\t이름: " << lease.Name[i] << endl;
+            cout << "\t\t\t회원 ID: " << lease.Natio_ID[i] << endl;
+            cout << "\t\t\t전화번호: " << lease.rented_car[i] << endl;
+            cout << "\t\t\t반납일: " << lease.return_date[i] << endl;
+            cout << "\t\t\t-----------------------------\n";
+
+            // 결과를 파일에 저장
+            output << "이름: " << lease.Name[i] << endl;
+            output << "회원 ID: " << lease.Natio_ID[i] << endl;
+            output << "전화번호: " << lease.rented_car[i] << endl;
+            output << "반납일: " << lease.return_date[i] << endl;
+            output << "-----------------------------" << endl;
+        }
+    }
+    output.close();
+    return 0;
+}
